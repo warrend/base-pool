@@ -13,25 +13,25 @@ export default defineConfig({
         description: 'I am a simple vite app',
         icons: [
           {
-            src: '/src/assets/icons/manifest-icon-192.maskable.png',
+            src: 'src/assets/icons/manifest-icon-192.maskable.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/src/assets/icons/manifest-icon-192.maskable.png',
+            src: 'src/assets/icons/manifest-icon-192.maskable.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'maskable',
           },
           {
-            src: '/src/assets/icons/manifest-icon-512.maskable.png',
+            src: 'src/assets/icons/manifest-icon-512.maskable.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/src/assets/icons/manifest-icon-512.maskable.png',
+            src: 'src/assets/icons/manifest-icon-512.maskable.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
@@ -44,14 +44,14 @@ export default defineConfig({
         start_url: '/',
         screenshots: [
           {
-            src: '/android-chrome-512x512.png',
-            sizes: '1920x1080',
+            src: 'src/assets/icons/manifest-icon-512.maskable.png',
+            sizes: '1280x720',
             type: 'image/png',
             form_factor: 'wide' as const,
             label: 'Desktop wide view of the app',
           },
           {
-            src: '/android-chrome-512x512.png',
+            src: 'src/assets/icons/manifest-icon-512.maskable.png',
             sizes: '390x844',
             type: 'image/png',
             form_factor: 'narrow' as const,
