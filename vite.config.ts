@@ -1,9 +1,12 @@
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import tailwindcss from '@tailwindcss/vite';
+import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   plugins: [
+    react(),
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -13,25 +16,25 @@ export default defineConfig({
         description: 'I am a simple vite app',
         icons: [
           {
-            src: 'src/assets/icons/manifest-icon-192.maskable.png',
+            src: '/manifest-icon-192-maskable.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: 'src/assets/icons/manifest-icon-192.maskable.png',
+            src: '/manifest-icon-192-maskable.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'maskable',
           },
           {
-            src: 'src/assets/icons/manifest-icon-512.maskable.png',
+            src: '/manifest-icon-512-maskable.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: 'src/assets/icons/manifest-icon-512.maskable.png',
+            src: '/manifest-icon-512-maskable.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
@@ -44,15 +47,15 @@ export default defineConfig({
         start_url: '/',
         screenshots: [
           {
-            src: 'src/assets/icons/manifest-icon-512.maskable.png',
-            sizes: '1280x720',
+            src: '/manifest-icon-512-maskable.png',
+            sizes: '512x512',
             type: 'image/png',
             form_factor: 'wide' as const,
             label: 'Desktop wide view of the app',
           },
           {
-            src: 'src/assets/icons/manifest-icon-512.maskable.png',
-            sizes: '390x844',
+            src: '/manifest-icon-512-maskable.png',
+            sizes: '512x512',
             type: 'image/png',
             form_factor: 'narrow' as const,
             label: 'Mobile view of the app',
@@ -65,4 +68,12 @@ export default defineConfig({
       },
     }),
   ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  server: {
+    host: true, // ← this is the fix
+  },
 });
