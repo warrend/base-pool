@@ -86,16 +86,21 @@ export function NewGameForm({
 
         <div className="space-y-2">
           <Label htmlFor="raceTo">Race to</Label>
-          <Input
-            id="raceTo"
-            type="number"
-            min="1"
-            max="20"
-            value={raceToNumber}
-            onChange={(e) =>
-              onRaceToNumberChange(parseInt(e.target.value) || 1)
-            }
-          />
+          <Select
+            value={raceToNumber.toString()}
+            onValueChange={(value) => onRaceToNumberChange(parseInt(value))}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select race to number" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="5">5</SelectItem>
+              <SelectItem value="7">7</SelectItem>
+              <SelectItem value="9">9</SelectItem>
+              <SelectItem value="11">11</SelectItem>
+              <SelectItem value="15">15</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">

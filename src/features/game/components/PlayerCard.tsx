@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { Undo2 } from 'lucide-react';
 import type { Player } from '@/stores/gameStore';
 
 interface PlayerCardProps {
@@ -17,7 +18,8 @@ export function PlayerCard({
   position,
   onScoreChange,
 }: PlayerCardProps) {
-  const borderClass = position === 'top' ? 'border-b-2 border-white/20' : '';
+  const borderClass =
+    position === 'top' ? 'border-b-2 border-slate-800/50' : '';
 
   return (
     <Card
@@ -28,36 +30,26 @@ export function PlayerCard({
       } ${isWinner ? 'bg-yellow-400/10 border-yellow-400/50' : 'bg-white/5'}`}
       onClick={() => !isGameFinished && onScoreChange(player.id, true)}
     >
-      <CardContent className="h-full flex flex-col justify-center items-center p-8">
-        <CardTitle className="text-2xl font-bold text-white mb-4">
+      <CardContent className="h-full flex flex-col justify-center items-center p-8 relative">
+        <CardTitle className="text-2xl font-semibold text-green-600 mb-4">
           {player.name}
         </CardTitle>
-        <div className="text-8xl font-bold text-white mb-6">{player.score}</div>
+        <div className="text-9xl font-bold text-slate-400 mb-6">
+          {player.score}
+        </div>
         {!isGameFinished && (
-          <div className="space-x-4">
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                onScoreChange(player.id, true);
-              }}
-              size="lg"
-              className="w-20 h-12 text-lg"
-            >
-              +1
-            </Button>
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                onScoreChange(player.id, false);
-              }}
-              variant="outline"
-              size="lg"
-              className="w-20 h-12 text-lg bg-white/10 border-white/20 hover:bg-white/20 text-white"
-              disabled={player.score === 0}
-            >
-              -1
-            </Button>
-          </div>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              onScoreChange(player.id, false);
+            }}
+            variant="outline"
+            size="icon"
+            className="absolute bottom-0 right-4 w-10 h-10 rounded-full bg-white/10 border-white/20 hover:bg-white/20 text-white"
+            disabled={player.score === 0}
+          >
+            <Undo2 size={16} className="text-slate-400" />
+          </Button>
         )}
       </CardContent>
     </Card>

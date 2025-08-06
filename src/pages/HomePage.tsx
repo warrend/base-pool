@@ -9,35 +9,20 @@ export function HomePage() {
 
   const [player1Name, setPlayer1Name] = useState('');
   const [player2Name, setPlayer2Name] = useState('');
-  const [raceToNumber, setRaceToNumber] = useState(5);
+  const [raceToNumber, setRaceToNumber] = useState(7);
   const [gameType, setGameType] = useState<'8-ball' | '9-ball' | '10-ball'>(
     '8-ball'
   );
   const [showNewGameForm, setShowNewGameForm] = useState(false);
 
   const handleStartGame = () => {
-    console.log('handleStartGame called');
-    console.log('Form values:', {
-      player1Name,
-      player2Name,
-      raceToNumber,
-      gameType,
-    });
-    console.log('Form validation:', {
-      player1Valid: player1Name.trim(),
-      player2Valid: player2Name.trim(),
-      raceToValid: raceToNumber > 0,
-    });
-
     if (player1Name.trim() && player2Name.trim() && raceToNumber > 0) {
-      console.log('Starting new game...');
       startNewGame(
         player1Name.trim(),
         player2Name.trim(),
         raceToNumber,
         gameType
       );
-      console.log('Navigating to game...');
       navigate('/game');
     } else {
       console.log('Form validation failed');
@@ -50,7 +35,7 @@ export function HomePage() {
   const resetForm = () => {
     setPlayer1Name('');
     setPlayer2Name('');
-    setRaceToNumber(5);
+    setRaceToNumber(7);
     setGameType('8-ball');
     setShowNewGameForm(false);
   };

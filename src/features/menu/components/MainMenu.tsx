@@ -18,7 +18,7 @@ export function MainMenu({
         <CardContent className="space-y-4">
           <Button
             onClick={onNewGameClick}
-            className="w-full text-lg py-6"
+            className="w-full text-md py-4"
             size="lg"
           >
             New Game
@@ -27,7 +27,7 @@ export function MainMenu({
           <Button
             onClick={onHistoryClick}
             variant="outline"
-            className="w-full text-lg py-6"
+            className="w-full text-md py-4"
             size="lg"
             disabled={gameHistoryCount === 0}
           >

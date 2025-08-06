@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useGameStore } from '@/stores/gameStore';
+import { Trophy } from 'lucide-react';
 
 export function HistoryPage() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export function HistoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 p-4">
+    <div className="min-h-screen p-4">
       <div className="max-w-md mx-auto">
         {/* Navigation */}
         <div className="mb-6 flex justify-between">
@@ -64,8 +65,8 @@ export function HistoryPage() {
           </Card>
         ) : (
           <div className="space-y-4">
-            <div className="mb-2">
-              <small className="text-slate-200">
+            <div className="mb-2 font-bold">
+              <small className="text-slate-700">
                 {gameHistory.length} game{gameHistory.length !== 1 ? 's' : ''}{' '}
                 played
               </small>
@@ -81,10 +82,10 @@ export function HistoryPage() {
                   <CardHeader className="pb-2">
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle className="text-lg">
+                        <CardTitle className="text-sm text-teal-600">
                           {game.gameType} - Race to {game.raceToNumber}
                         </CardTitle>
-                        <CardDescription>
+                        <CardDescription className="text-slate-400">
                           {formatDate(game.startTime)}
                         </CardDescription>
                       </div>
@@ -95,19 +96,10 @@ export function HistoryPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
-                      {/* Winner badge */}
-                      {game.winner && (
-                        <div className="text-center mb-3">
-                          <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-sm font-semibold">
-                            🏆 {game.winner} Wins!
-                          </span>
-                        </div>
-                      )}
-
                       {/* Score display */}
                       <div className="flex justify-between items-center">
                         <div className="text-center flex-1">
-                          <div className="font-semibold">
+                          <div className="font-semibold text-slate-300">
                             {game.player1.name}
                           </div>
                           <div
@@ -122,11 +114,11 @@ export function HistoryPage() {
                         </div>
 
                         <div className="text-gray-400 font-bold text-lg px-4">
-                          VS
+                          <Trophy />
                         </div>
 
                         <div className="text-center flex-1">
-                          <div className="font-semibold">
+                          <div className="font-semibold text-slate-300">
                             {game.player2.name}
                           </div>
                           <div

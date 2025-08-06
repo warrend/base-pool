@@ -40,7 +40,7 @@ export function GamePage() {
   const isGameFinished = !currentGame.isActive;
 
   return (
-    <div className="h-screen bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 relative overflow-hidden">
+    <div className="h-screen relative overflow-hidden">
       <GameHeader
         raceToNumber={currentGame.raceToNumber}
         gameType={currentGame.gameType}
