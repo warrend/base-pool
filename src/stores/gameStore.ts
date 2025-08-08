@@ -32,6 +32,8 @@ export interface PracticeSession {
   isActive: boolean;
   startTime: Date;
   endTime?: Date;
+  // Track history of shots to support undo
+  shots?: Array<'make' | 'miss'>;
 }
 
 interface GameState {
@@ -60,6 +62,8 @@ interface GameState {
   // New: Practice actions
   startPractice: (playerName: string) => void;
   recordPracticeShot: (made: boolean) => void;
+  // Undo last recorded practice shot
+  undoPracticeShot: () => void;
   endPractice: () => void;
   clearPracticeHistory: () => void;
 }
@@ -181,6 +185,8 @@ export const useGameStore = create<GameState>()(
           misses: 0,
           isActive: true,
           startTime: new Date(),
+          // Initialize shots history
+          shots: [],
         };
         set({ currentPractice: session });
       },
@@ -192,6 +198,26 @@ export const useGameStore = create<GameState>()(
           ...currentPractice,
           makes: currentPractice.makes + (made ? 1 : 0),
           misses: currentPractice.misses + (!made ? 1 : 0),
+          shots: [...(currentPractice.shots ?? []), made ? 'make' : 'miss'],
+        };
+        set({ currentPractice: updated });
+      },
+
+      // Undo the last recorded shot in practice mode
+      undoPracticeShot: () => {
+        const { currentPractice } = get();
+        if (!currentPractice || !currentPractice.isActive) return;
+        const shots = [...(currentPractice.shots ?? [])];
+        const last = shots.pop();
+        if (!last) return;
+        const updated: PracticeSession = {
+          ...currentPractice,
+          makes: Math.max(0, currentPractice.makes - (last === 'make' ? 1 : 0)),
+          misses: Math.max(
+            0,
+            currentPractice.misses - (last === 'miss' ? 1 : 0)
+          ),
+          shots,
         };
         set({ currentPractice: updated });
       },

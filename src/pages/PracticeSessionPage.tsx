@@ -2,13 +2,19 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useGameStore } from '@/stores/gameStore';
+import { Undo2 } from 'lucide-react';
 
 export function PracticeSessionPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const name = (location.state as { name?: string })?.name;
-  const { currentPractice, startPractice, recordPracticeShot, endPractice } =
-    useGameStore();
+  const {
+    currentPractice,
+    startPractice,
+    recordPracticeShot,
+    endPractice,
+    undoPracticeShot,
+  } = useGameStore();
 
   useEffect(() => {
     if (!name) {
@@ -39,9 +45,14 @@ export function PracticeSessionPage() {
           End
         </Button>
       </div>
-      {/* Centered total shots */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-green-500 font-semibold">
-        {total} shots
+
+      {/* Top stats (moved from footer) */}
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center text-slate-400">
+        <div className="text-sm">{name}</div>
+        <div className="text-lg font-semibold text-slate-100">
+          {total > 0 ? `${makes} for ${total}` : '0 for 0'}
+        </div>
+        <div className="text-xs">Total shots: {total}</div>
       </div>
 
       {/* Main content */}
@@ -73,14 +84,17 @@ export function PracticeSessionPage() {
         </div>
       </div>
 
-      {/* Footer stats */}
-      <div className="absolute inset-x-0 bottom-4 text-center text-slate-400">
-        <div className="text-sm">{name}</div>
-        <div className="text-lg font-semibold text-slate-100">
-          {total > 0 ? `${makes} for ${total}` : '0 for 0'}
-        </div>
-        <div className="text-xs">Total shots: {total}</div>
-      </div>
+      {/* Floating Undo button */}
+      <Button
+        onClick={() => undoPracticeShot()}
+        variant="outline"
+        size="icon"
+        className="absolute bottom-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 border-white/20 hover:bg-white/20 text-white"
+        disabled={total === 0}
+        aria-label="Undo last shot"
+      >
+        <Undo2 size={16} className="text-slate-400" />
+      </Button>
     </div>
   );
 }
