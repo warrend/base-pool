@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { HomePage } from '@/pages/HomePage';
 import { GamePage } from '@/pages/GamePage';
 import { HistoryPage } from '@/pages/HistoryPage';
+import { PracticeSetupPage } from '@/pages/PracticeSetupPage';
+import { PracticeSessionPage } from '@/pages/PracticeSessionPage';
 import './index.css';
 
 function App() {
@@ -9,9 +10,10 @@ function App() {
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HistoryPage />} />
           <Route path="/game" element={<GamePage />} />
-          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/practice" element={<PracticeSetupPage />} />
+          <Route path="/practice/session" element={<PracticeSessionPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

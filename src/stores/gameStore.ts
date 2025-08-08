@@ -23,12 +23,27 @@ export interface Game {
   endTime?: Date;
 }
 
+// New: Practice session support
+export interface PracticeSession {
+  id: string;
+  playerName: string;
+  makes: number;
+  misses: number;
+  isActive: boolean;
+  startTime: Date;
+  endTime?: Date;
+}
+
 interface GameState {
   // Current game
   currentGame: Game | null;
+  // New: current practice session
+  currentPractice: PracticeSession | null;
 
   // Game history
   gameHistory: Game[];
+  // New: practice history
+  practiceHistory: PracticeSession[];
 
   // Actions
   startNewGame: (
@@ -41,6 +56,12 @@ interface GameState {
   endGame: () => void;
   loadGame: (gameId: string) => void;
   clearHistory: () => void;
+
+  // New: Practice actions
+  startPractice: (playerName: string) => void;
+  recordPracticeShot: (made: boolean) => void;
+  endPractice: () => void;
+  clearPracticeHistory: () => void;
 }
 
 const createNewGame = (
@@ -70,7 +91,9 @@ export const useGameStore = create<GameState>()(
   persist(
     (set, get) => ({
       currentGame: null,
+      currentPractice: null,
       gameHistory: [],
+      practiceHistory: [],
 
       startNewGame: (
         player1Name: string,
@@ -147,6 +170,48 @@ export const useGameStore = create<GameState>()(
 
       clearHistory: () => {
         set({ gameHistory: [] });
+      },
+
+      // Practice actions
+      startPractice: (playerName: string) => {
+        const session: PracticeSession = {
+          id: generateId(),
+          playerName,
+          makes: 0,
+          misses: 0,
+          isActive: true,
+          startTime: new Date(),
+        };
+        set({ currentPractice: session });
+      },
+
+      recordPracticeShot: (made: boolean) => {
+        const { currentPractice } = get();
+        if (!currentPractice || !currentPractice.isActive) return;
+        const updated: PracticeSession = {
+          ...currentPractice,
+          makes: currentPractice.makes + (made ? 1 : 0),
+          misses: currentPractice.misses + (!made ? 1 : 0),
+        };
+        set({ currentPractice: updated });
+      },
+
+      endPractice: () => {
+        const { currentPractice, practiceHistory } = get();
+        if (!currentPractice) return;
+        const finished: PracticeSession = {
+          ...currentPractice,
+          isActive: false,
+          endTime: new Date(),
+        };
+        set({
+          currentPractice: null,
+          practiceHistory: [...practiceHistory, finished],
+        });
+      },
+
+      clearPracticeHistory: () => {
+        set({ practiceHistory: [] });
       },
     }),
     {
