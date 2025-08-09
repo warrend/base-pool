@@ -63,8 +63,10 @@ export default defineConfig({
         ],
       },
       workbox: {
-        // defining cached files formats
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
+        // Precache common static assets for offline use
+        globPatterns: [
+          '**/*.{js,css,html,ico,png,svg,webmanifest,jpg,jpeg,webp,avif,woff,woff2,ttf,eot}',
+        ],
       },
     }),
   ],
