@@ -45,7 +45,7 @@ export function PlayerCard({
             }}
             variant="outline"
             size="icon"
-            className="absolute bottom-0 right-4 w-10 h-10 rounded-full bg-white/10 border-white/20 hover:bg-white/20 text-white"
+            className="absolute right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] w-10 h-10 rounded-full bg-white/10 border-white/20 hover:bg-white/20 text-white"
             disabled={player.score === 0}
           >
             <Undo2 size={16} className="text-slate-400" />

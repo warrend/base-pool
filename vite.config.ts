@@ -12,7 +12,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       manifest: {
         name: 'base pool',
-        short_name: 'base-pool',
+        short_name: 'base pool',
         description: 'Track practice and matches.',
         icons: [
           {
@@ -47,18 +47,18 @@ export default defineConfig({
         start_url: '/',
         screenshots: [
           {
-            src: '/icons/manifest-icon-512.maskable.png',
-            sizes: '512x512',
-            type: 'image/png',
-            form_factor: 'wide' as const,
-            label: 'Desktop wide view of the app',
-          },
-          {
-            src: '/icons/manifest-icon-512.maskable.png',
-            sizes: '512x512',
+            src: 'icons/apple-splash-1284-2778.png',
+            sizes: '1284x2778',
             type: 'image/png',
             form_factor: 'narrow' as const,
-            label: 'Mobile view of the app',
+            label: 'Portrait view of the app',
+          },
+          {
+            src: 'icons/apple-splash-2778-1284.png',
+            sizes: '2778x1284',
+            type: 'image/png',
+            form_factor: 'wide' as const,
+            label: 'Landscape view of the app',
           },
         ],
       },

@@ -38,7 +38,7 @@ export function PracticeSessionPage() {
   };
 
   return (
-    <div className="h-screen relative overflow-hidden">
+    <div className="fixed inset-0 overflow-hidden">
       {/* Top controls */}
       <div className="absolute top-4 right-4 z-10">
         <Button variant="destructive" size="sm" onClick={handleEnd}>
@@ -89,7 +89,7 @@ export function PracticeSessionPage() {
         onClick={() => undoPracticeShot()}
         variant="outline"
         size="icon"
-        className="absolute bottom-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 border-white/20 hover:bg-white/20 text-white"
+        className="absolute right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-10 w-10 h-10 rounded-full bg-white/10 border-white/20 hover:bg-white/20 text-white"
         disabled={total === 0}
         aria-label="Undo last shot"
       >
