@@ -47,12 +47,12 @@ export function PracticeSessionPage() {
       </div>
 
       {/* Top stats (moved from footer) */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center text-slate-400">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center text-gray-400">
         <div className="text-sm">{name}</div>
-        <div className="text-lg font-semibold text-slate-100">
+        <div className="text-lg font-semibold text-gray-100">
           {total > 0 ? `${makes} for ${total}` : '0 for 0'}
         </div>
-        <div className="text-xs">Total shots: {total}</div>
+        <div className="text-xs text-gray-500">Total shots: {total}</div>
       </div>
 
       {/* Main content */}
@@ -63,7 +63,7 @@ export function PracticeSessionPage() {
           onClick={() => recordPracticeShot(true)}
         >
           <div className="text-center">
-            <div className="text-2xl font-semibold text-slate-200 mb-2">
+            <div className="text-2xl font-semibold text-gray-200 mb-2">
               Make
             </div>
             <div className="text-6xl font-bold text-white">{makes}</div>
@@ -76,7 +76,7 @@ export function PracticeSessionPage() {
           onClick={() => recordPracticeShot(false)}
         >
           <div className="text-center">
-            <div className="text-2xl font-semibold text-slate-200 mb-2">
+            <div className="text-2xl font-semibold text-gray-200 mb-2">
               Miss
             </div>
             <div className="text-6xl font-bold text-white">{misses}</div>
@@ -93,7 +93,7 @@ export function PracticeSessionPage() {
         disabled={total === 0}
         aria-label="Undo last shot"
       >
-        <Undo2 size={16} className="text-slate-400" />
+        <Undo2 size={16} className="text-gray-400" />
       </Button>
     </div>
   );

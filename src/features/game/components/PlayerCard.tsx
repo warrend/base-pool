@@ -31,7 +31,7 @@ export function PlayerCard({
       onClick={() => !isGameFinished && onScoreChange(player.id, true)}
     >
       <CardContent className="h-full flex flex-col justify-center items-center p-8 relative">
-        <CardTitle className="text-2xl font-semibold text-green-600 mb-4">
+        <CardTitle className="text-2xl font-semibold text-slate-200 mb-4">
           {player.name}
         </CardTitle>
         <div className="text-9xl font-bold text-slate-400 mb-6">

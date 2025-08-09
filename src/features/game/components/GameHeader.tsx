@@ -52,7 +52,7 @@ export function GameHeader({
         )}
 
         <div className="text-center">
-          <h1 className="text-lg font-bold text-slate-600 flex items-center justify-center gap-2">
+          <h1 className="text-lg font-bold text-gray-300 flex items-center justify-center gap-2">
             {gameType}
             <Play size={18} />
             <span>Race to {raceToNumber}</span>
@@ -88,15 +88,15 @@ export function GameHeader({
       {/* Confirmation Dialog */}
       {showConfirmDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-900 rounded-lg p-6 max-w-sm w-full">
-            <p className="text-slate-600 text-center mb-6">
+          <div className="bg-gray-900 rounded-lg p-6 max-w-sm w-full">
+            <p className="text-gray-400 text-center mb-6">
               Are you sure? The game will be deleted.
             </p>
             <div className="flex gap-3 justify-center">
               <Button
                 onClick={handleCancelEnd}
                 variant="outline"
-                className="bg-slate-800 border-slate-600 text-slate-300 hover:bg-slate-700"
+                className="bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700"
               >
                 Cancel
               </Button>

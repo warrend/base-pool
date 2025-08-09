@@ -97,18 +97,33 @@ export function HistoryPage() {
     });
   };
 
-  const formatDuration = (startTime: Date, endTime?: Date) => {
-    if (!endTime) return 'In progress';
+  const formatDuration = (
+    startTime: unknown,
+    endTime?: unknown,
+    isActive?: boolean
+  ) => {
+    const toMs = (v: unknown): number => {
+      if (typeof v === 'number') return v;
+      if (v instanceof Date) return v.getTime();
+      const parsed = Date.parse(String(v));
+      return Number.isNaN(parsed) ? NaN : parsed;
+    };
 
-    const duration =
-      new Date(endTime).getTime() - new Date(startTime).getTime();
+    const startMs = toMs(startTime);
+    let endMs = endTime != null ? toMs(endTime) : undefined;
+    if ((endMs == null || Number.isNaN(endMs)) && isActive) {
+      endMs = Date.now();
+    }
+
+    if (Number.isNaN(startMs) || endMs == null || Number.isNaN(endMs)) {
+      return isActive ? 'In progress' : '—';
+    }
+
+    const duration = Math.max(0, endMs - startMs);
     const minutes = Math.floor(duration / 60000);
     const seconds = Math.floor((duration % 60000) / 1000);
 
-    if (minutes > 0) {
-      return `${minutes}m ${seconds}s`;
-    }
-    return `${seconds}s`;
+    return minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
   };
 
   return (
@@ -117,32 +132,41 @@ export function HistoryPage() {
         {!showNewGameForm ? (
           <>
             {/* Navigation */}
-            <div className="mb-6 flex justify-end relative">
-              <Button
-                onClick={handlePlusClick}
-                size="icon"
-                className="w-10 h-10 rounded-full"
-                aria-haspopup="menu"
-                aria-expanded={menuOpen}
-              >
-                <Plus size={20} />
-              </Button>
-              {menuOpen && (
-                <div className="absolute top-12 right-0 bg-slate-900 border border-slate-700 rounded-md shadow-md overflow-hidden z-10">
-                  <button
-                    className="block w-full text-left px-4 py-2 text-slate-200 hover:bg-slate-800"
-                    onClick={handleStartMatch}
-                  >
-                    Match
-                  </button>
-                  <button
-                    className="block w-full text-left px-4 py-2 text-slate-200 hover:bg-slate-800"
-                    onClick={handleStartPractice}
-                  >
-                    Practice
-                  </button>
-                </div>
-              )}
+            <div className="mb-6 flex items-center justify-between relative">
+              {/* Brand */}
+              <div className="text-xl leading-none select-none text-indigo-400">
+                <span className="font-extrabold">base</span>
+                <span className="font-thin">pool</span>
+              </div>
+
+              {/* Actions */}
+              <div>
+                <Button
+                  onClick={handlePlusClick}
+                  size="icon"
+                  className="w-10 h-10 rounded-full"
+                  aria-haspopup="menu"
+                  aria-expanded={menuOpen}
+                >
+                  <Plus size={20} />
+                </Button>
+                {menuOpen && (
+                  <div className="absolute top-12 right-0 bg-gray-900 border border-gray-700 rounded-md shadow-md overflow-hidden z-10">
+                    <button
+                      className="block w-full text-left px-4 py-2 text-gray-200 hover:bg-gray-800"
+                      onClick={handleStartMatch}
+                    >
+                      Match
+                    </button>
+                    <button
+                      className="block w-full text-left px-4 py-2 text-gray-200 hover:bg-gray-800"
+                      onClick={handleStartPractice}
+                    >
+                      Practice
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* History List */}
@@ -156,7 +180,7 @@ export function HistoryPage() {
             ) : (
               <div className="space-y-4">
                 <div className="mb-2 font-bold">
-                  <small className="text-slate-700">
+                  <small className="text-gray-500">
                     {combined.length} session{combined.length !== 1 ? 's' : ''}{' '}
                     total
                   </small>
@@ -169,19 +193,20 @@ export function HistoryPage() {
                     <CardHeader className="pb-2">
                       <div className="flex justify-between items-start">
                         <div>
-                          <CardTitle className="text-sm text-teal-600">
+                          <CardTitle className="text-sm text-indigo-400">
                             {entry.type === 'game'
                               ? `${entry.item.gameType} - Race to ${entry.item.raceToNumber}`
                               : 'Practice Session'}
                           </CardTitle>
-                          <CardDescription className="text-slate-400">
+                          <CardDescription className="text-gray-400">
                             {formatDate(entry.item.startTime)}
                           </CardDescription>
                         </div>
                         <div className="text-right text-sm text-gray-500">
                           {formatDuration(
                             entry.item.startTime,
-                            entry.item.endTime
+                            entry.item.endTime,
+                            entry.item.isActive
                           )}
                         </div>
                       </div>
@@ -191,13 +216,13 @@ export function HistoryPage() {
                         <div className="space-y-2">
                           <div className="flex justify-between items-center">
                             <div className="text-center flex-1">
-                              <div className="font-semibold text-slate-300">
+                              <div className="font-semibold text-gray-200">
                                 {entry.item.player1.name}
                               </div>
                               <div
                                 className={`text-2xl font-bold ${
                                   entry.item.winner === entry.item.player1.name
-                                    ? 'text-green-600'
+                                    ? 'text-indigo-400'
                                     : ''
                                 }`}
                               >
@@ -208,13 +233,13 @@ export function HistoryPage() {
                               VS
                             </div>
                             <div className="text-center flex-1">
-                              <div className="font-semibold text-slate-300">
+                              <div className="font-semibold text-gray-200">
                                 {entry.item.player2.name}
                               </div>
                               <div
                                 className={`text-2xl font-bold ${
                                   entry.item.winner === entry.item.player2.name
-                                    ? 'text-green-600'
+                                    ? 'text-indigo-400'
                                     : ''
                                 }`}
                               >
@@ -237,10 +262,10 @@ export function HistoryPage() {
                         <div className="space-y-2">
                           <div className="flex justify-between items-center">
                             <div className="text-center flex-1">
-                              <div className="font-semibold text-slate-300">
+                              <div className="font-semibold text-gray-200">
                                 {entry.item.playerName}
                               </div>
-                              <div className="text-xs text-slate-500">
+                              <div className="text-xs text-gray-500">
                                 Practice
                               </div>
                             </div>
@@ -249,7 +274,7 @@ export function HistoryPage() {
                                 {entry.item.makes} /{' '}
                                 {entry.item.makes + entry.item.misses}
                               </div>
-                              <div className="text-xs text-slate-500">
+                              <div className="text-xs text-gray-500">
                                 Made / Total
                               </div>
                             </div>
@@ -257,7 +282,7 @@ export function HistoryPage() {
                               <div className="text-2xl font-bold">
                                 {entry.item.misses}
                               </div>
-                              <div className="text-xs text-slate-500">
+                              <div className="text-xs text-gray-500">
                                 Missed
                               </div>
                             </div>
