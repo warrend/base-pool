@@ -24,6 +24,11 @@ export function PracticeSessionPage() {
     if (!currentPractice) {
       startPractice(name);
     }
+    const root = document.getElementById('root');
+    root?.classList.add('no-scroll');
+    return () => {
+      root?.classList.remove('no-scroll');
+    };
   }, [name, currentPractice, startPractice, navigate]);
 
   if (!name) return null;
@@ -38,7 +43,7 @@ export function PracticeSessionPage() {
   };
 
   return (
-    <div className="fixed inset-0 overflow-hidden">
+    <div className="fixed inset-0 overflow-hidden overscroll-none touch-none">
       {/* Top controls */}
       <div className="absolute top-4 right-4 z-10">
         <Button variant="destructive" size="sm" onClick={handleEnd}>

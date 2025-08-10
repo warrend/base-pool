@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,6 +31,7 @@ export function HistoryPage() {
     '8-ball'
   );
   const [menuOpen, setMenuOpen] = useState(false);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   // Combine game and practice entries for a single timeline
   type CombinedEntry =
@@ -127,201 +128,210 @@ export function HistoryPage() {
   };
 
   return (
-    <div className="min-h-screen p-4">
-      <div className="max-w-md mx-auto">
-        {!showNewGameForm ? (
-          <>
-            {/* Navigation */}
-            <div className="mb-6 flex items-center justify-between relative">
-              {/* Brand */}
-              <div className="text-xl leading-none select-none text-indigo-400">
-                <span className="font-extrabold">base</span>
-                <span className="font-thin">pool</span>
-              </div>
-
-              {/* Actions */}
-              <div>
-                <Button
-                  onClick={handlePlusClick}
-                  size="icon"
-                  className="w-10 h-10 rounded-full"
-                  aria-haspopup="menu"
-                  aria-expanded={menuOpen}
-                >
-                  <Plus size={20} />
-                </Button>
-                {menuOpen && (
-                  <div className="absolute top-12 right-0 bg-gray-900 border border-gray-700 rounded-md shadow-md overflow-hidden z-10">
-                    <button
-                      className="block w-full text-left px-4 py-2 text-gray-200 hover:bg-gray-800"
-                      onClick={handleStartMatch}
-                    >
-                      Match
-                    </button>
-                    <button
-                      className="block w-full text-left px-4 py-2 text-gray-200 hover:bg-gray-800"
-                      onClick={handleStartPractice}
-                    >
-                      Practice
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* History List */}
-            {combined.length === 0 ? (
-              <Card>
-                <CardContent className="text-center py-8">
-                  <p className="text-gray-500 mb-4">No sessions yet</p>
-                  <Button onClick={handlePlusClick}>Start</Button>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="space-y-4">
-                <div className="mb-2 font-bold">
-                  <small className="text-gray-500">
-                    {combined.length} session{combined.length !== 1 ? 's' : ''}{' '}
-                    total
-                  </small>
+    <div className="py-4">
+      <div
+        ref={scrollRef}
+        className={
+          'box-border pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] px-4'
+        }
+      >
+        <div className="max-w-md mx-auto">
+          {!showNewGameForm ? (
+            <>
+              {/* Navigation */}
+              <div className="mb-6 flex items-center justify-between relative">
+                {/* Brand */}
+                <div className="text-xl leading-none select-none text-indigo-400">
+                  <span className="font-extrabold">base</span>
+                  <span className="font-thin">pool</span>
                 </div>
-                {combined.map((entry) => (
-                  <Card
-                    key={`${entry.type}-${entry.item.id}`}
-                    className="relative"
-                  >
-                    <CardHeader className="pb-2">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <CardTitle className="text-sm text-indigo-400">
-                            {entry.type === 'game'
-                              ? `${entry.item.gameType} - Race to ${entry.item.raceToNumber}`
-                              : 'Practice Session'}
-                          </CardTitle>
-                          <CardDescription className="text-gray-400">
-                            {formatDate(entry.item.startTime)}
-                          </CardDescription>
-                        </div>
-                        <div className="text-right text-sm text-gray-500">
-                          {formatDuration(
-                            entry.item.startTime,
-                            entry.item.endTime,
-                            entry.item.isActive
-                          )}
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {entry.type === 'game' ? (
-                        <div className="space-y-2">
-                          <div className="flex justify-between items-center">
-                            <div className="text-center flex-1">
-                              <div className="font-semibold text-gray-200">
-                                {entry.item.player1.name}
-                              </div>
-                              <div
-                                className={`text-2xl font-bold ${
-                                  entry.item.winner === entry.item.player1.name
-                                    ? 'text-indigo-400'
-                                    : ''
-                                }`}
-                              >
-                                {entry.item.player1.score}
-                              </div>
-                            </div>
-                            <div className="text-gray-400 font-bold text-lg px-4">
-                              VS
-                            </div>
-                            <div className="text-center flex-1">
-                              <div className="font-semibold text-gray-200">
-                                {entry.item.player2.name}
-                              </div>
-                              <div
-                                className={`text-2xl font-bold ${
-                                  entry.item.winner === entry.item.player2.name
-                                    ? 'text-indigo-400'
-                                    : ''
-                                }`}
-                              >
-                                {entry.item.player2.score}
-                              </div>
-                            </div>
-                          </div>
-                          {!entry.item.winner && entry.item.isActive && (
-                            <div className="text-center text-blue-600 text-sm font-medium">
-                              Game in progress
-                            </div>
-                          )}
-                          {!entry.item.winner && !entry.item.isActive && (
-                            <div className="text-center text-gray-500 text-sm">
-                              Game ended
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          <div className="flex justify-between items-center">
-                            <div className="text-center flex-1">
-                              <div className="font-semibold text-gray-200">
-                                {entry.item.playerName}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                Practice
-                              </div>
-                            </div>
-                            <div className="text-center flex-1">
-                              <div className="text-xl font-bold">
-                                {entry.item.makes} /{' '}
-                                {entry.item.makes + entry.item.misses}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                Made / Total
-                              </div>
-                            </div>
-                            <div className="text-center flex-1">
-                              <div className="text-2xl font-bold">
-                                {entry.item.misses}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                Missed
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
 
-            {/* Clear History Button */}
-            {combined.length > 0 && (
-              <div className="mt-6 flex justify-center">
-                <Button
-                  onClick={handleClearAllHistory}
-                  variant="destructive"
-                  size="sm"
-                >
-                  Clear History
-                </Button>
+                {/* Actions */}
+                <div>
+                  <Button
+                    onClick={handlePlusClick}
+                    size="icon"
+                    className="w-10 h-10 rounded-full"
+                    aria-haspopup="menu"
+                    aria-expanded={menuOpen}
+                  >
+                    <Plus size={20} />
+                  </Button>
+                  {menuOpen && (
+                    <div className="absolute top-12 right-0 bg-gray-900 border border-gray-700 rounded-md shadow-md overflow-hidden z-10">
+                      <button
+                        className="block w-full text-left px-4 py-2 text-gray-200 hover:bg-gray-800"
+                        onClick={handleStartMatch}
+                      >
+                        Match
+                      </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-gray-200 hover:bg-gray-800"
+                        onClick={handleStartPractice}
+                      >
+                        Practice
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </>
-        ) : (
-          <NewGameForm
-            player1Name={player1Name}
-            player2Name={player2Name}
-            raceToNumber={raceToNumber}
-            gameType={gameType}
-            onPlayer1NameChange={setPlayer1Name}
-            onPlayer2NameChange={setPlayer2Name}
-            onRaceToNumberChange={setRaceToNumber}
-            onGameTypeChange={setGameType}
-            onStartGame={handleStartGame}
-            onCancel={resetForm}
-          />
-        )}
+
+              {/* History List */}
+              {combined.length === 0 ? (
+                <Card>
+                  <CardContent className="text-center py-8">
+                    <p className="text-gray-500 mb-4">No sessions yet</p>
+                    <Button onClick={handlePlusClick}>Start</Button>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="space-y-4">
+                  <div className="mb-2 font-bold">
+                    <small className="text-gray-500">
+                      {combined.length} session
+                      {combined.length !== 1 ? 's' : ''} total
+                    </small>
+                  </div>
+                  {combined.map((entry) => (
+                    <Card
+                      key={`${entry.type}-${entry.item.id}`}
+                      className="relative"
+                    >
+                      <CardHeader className="pb-2">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <CardTitle className="text-sm text-indigo-400">
+                              {entry.type === 'game'
+                                ? `${entry.item.gameType} - Race to ${entry.item.raceToNumber}`
+                                : 'Practice Session'}
+                            </CardTitle>
+                            <CardDescription className="text-gray-400">
+                              {formatDate(entry.item.startTime)}
+                            </CardDescription>
+                          </div>
+                          <div className="text-right text-sm text-gray-500">
+                            {formatDuration(
+                              entry.item.startTime,
+                              entry.item.endTime,
+                              entry.item.isActive
+                            )}
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        {entry.type === 'game' ? (
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <div className="text-center flex-1">
+                                <div className="font-semibold text-gray-200">
+                                  {entry.item.player1.name}
+                                </div>
+                                <div
+                                  className={`text-2xl font-bold ${
+                                    entry.item.winner ===
+                                    entry.item.player1.name
+                                      ? 'text-indigo-400'
+                                      : ''
+                                  }`}
+                                >
+                                  {entry.item.player1.score}
+                                </div>
+                              </div>
+                              <div className="text-gray-400 font-bold text-lg px-4">
+                                VS
+                              </div>
+                              <div className="text-center flex-1">
+                                <div className="font-semibold text-gray-200">
+                                  {entry.item.player2.name}
+                                </div>
+                                <div
+                                  className={`text-2xl font-bold ${
+                                    entry.item.winner ===
+                                    entry.item.player2.name
+                                      ? 'text-indigo-400'
+                                      : ''
+                                  }`}
+                                >
+                                  {entry.item.player2.score}
+                                </div>
+                              </div>
+                            </div>
+                            {!entry.item.winner && entry.item.isActive && (
+                              <div className="text-center text-blue-600 text-sm font-medium">
+                                Game in progress
+                              </div>
+                            )}
+                            {!entry.item.winner && !entry.item.isActive && (
+                              <div className="text-center text-gray-500 text-sm">
+                                Game ended
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <div className="text-center flex-1">
+                                <div className="font-semibold text-gray-200">
+                                  {entry.item.playerName}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  Practice
+                                </div>
+                              </div>
+                              <div className="text-center flex-1">
+                                <div className="text-xl font-bold">
+                                  {entry.item.makes} /{' '}
+                                  {entry.item.makes + entry.item.misses}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  Made / Total
+                                </div>
+                              </div>
+                              <div className="text-center flex-1">
+                                <div className="text-2xl font-bold">
+                                  {entry.item.misses}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  Missed
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {/* Clear History Button */}
+              {combined.length > 0 && (
+                <div className="mt-6 flex justify-center">
+                  <Button
+                    onClick={handleClearAllHistory}
+                    variant="destructive"
+                    size="sm"
+                  >
+                    Clear History
+                  </Button>
+                </div>
+              )}
+            </>
+          ) : (
+            <NewGameForm
+              player1Name={player1Name}
+              player2Name={player2Name}
+              raceToNumber={raceToNumber}
+              gameType={gameType}
+              onPlayer1NameChange={setPlayer1Name}
+              onPlayer2NameChange={setPlayer2Name}
+              onRaceToNumberChange={setRaceToNumber}
+              onGameTypeChange={setGameType}
+              onStartGame={handleStartGame}
+              onCancel={resetForm}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

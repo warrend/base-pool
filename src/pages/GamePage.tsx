@@ -15,6 +15,11 @@ export function GamePage() {
     if (!currentGame) {
       navigate('/');
     }
+    const root = document.getElementById('root');
+    root?.classList.add('no-scroll');
+    return () => {
+      root?.classList.remove('no-scroll');
+    };
   }, [currentGame, navigate]);
 
   if (!currentGame) {
@@ -40,7 +45,7 @@ export function GamePage() {
   const isGameFinished = !currentGame.isActive;
 
   return (
-    <div className="fixed inset-0 overflow-hidden">
+    <div className="fixed inset-0 overflow-hidden overscroll-none touch-none">
       <GameHeader
         raceToNumber={currentGame.raceToNumber}
         gameType={currentGame.gameType}
