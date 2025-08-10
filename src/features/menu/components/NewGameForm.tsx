@@ -44,14 +44,6 @@ export function NewGameForm({
   const isFormValid = player1Name.trim() && player2Name.trim();
 
   const handleStartGameClick = () => {
-    console.log('Start Game button clicked');
-    console.log('Form valid:', isFormValid);
-    console.log('Form data:', {
-      player1Name,
-      player2Name,
-      raceToNumber,
-      gameType,
-    });
     onStartGame();
   };
 

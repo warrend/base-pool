@@ -76,7 +76,7 @@ export function HistoryPage() {
       );
       navigate('/game');
     } else {
-      console.log('Form validation failed');
+      console.error('Form validation failed');
     }
   };
 
