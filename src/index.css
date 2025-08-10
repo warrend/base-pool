@@ -12,7 +12,6 @@ body {
 }
 
 #root {
-  min-height: 100%;
 }
 
 /* Disable page scrolling when active (toggled from specific pages) */

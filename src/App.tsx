@@ -7,7 +7,7 @@ import './index.css';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-950 text-slate-100">
+    <div className="bg-gray-950 text-slate-100">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HistoryPage />} />

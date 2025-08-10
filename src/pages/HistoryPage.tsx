@@ -129,12 +129,7 @@ export function HistoryPage() {
 
   return (
     <div className="py-4">
-      <div
-        ref={scrollRef}
-        className={
-          'box-border pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] px-4'
-        }
-      >
+      <div ref={scrollRef} className={'px-4'}>
         <div className="max-w-md mx-auto">
           {!showNewGameForm ? (
             <>
