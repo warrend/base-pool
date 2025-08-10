@@ -11,8 +11,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'base pool',
-        short_name: 'base pool',
+        name: 'Base Pool',
+        short_name: 'Base Pool',
         description: 'Track practice and matches.',
         icons: [
           {
